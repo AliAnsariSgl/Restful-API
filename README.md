@@ -78,8 +78,8 @@ Response 2 - Failure 1:
 First things first, you'll be needing the [Golang](http://golang.org/) and [Serverless](http://serverless.com/) Framework installed, and an [AWS account](https://aws.amazon.com/) 
 
 ### Prerequisites
-1.GO
-2.Serverless
+1. GO
+2. Serverless
 
 ##### setup Go
 [Download](https://golang.org/dl/) Go and follow the installation instructions.
@@ -107,43 +107,40 @@ AWS Lambda functions are responsible for mentioned tasks:
    1. Create New Device for handling POST request
    2. getDevice for handling GET request
    3. These functions connect to a DynamoDB table named "devices"
-```    
+``` 
+## Deployment
+
+1- Create a new service based on this template
+```
+serverless create -u template aws-go-dep -p myservice
+````
+2-  Compile function
+````
+cd myservice
+%USERPROFILE%\go\bin\dep ensure
+set GOOS=linux
+go build -o bin/CreateDevice CreateDevice/main.go
+go build -o bin/GetDevice GetDevice/main.go
+%USERPROFILE%\go\bin\build-lambda-zip.exe -o bin/CreateDevice.zip bin/CreateDevice
+%USERPROFILE%\go\bin\build-lambda-zip.exe -o bin/GetDevice.zip bin/GetDevice
+``````
+3-Deploy
+```
+serverless deploy
+````
 ## Test
 
 For testing by URL, replace you API-GATEWAY-URL with following curl commands:
 
 #### NOTE :
-Also you can use [POSTMAN](https://www.getpostman.com/)for testing
+Also you can use [POSTMAN](https://www.getpostman.com/) for testing
 Create a new device:
 ```
-curl -i -H "Content-Type: application/json" -X POST -d '{"id":"/devices/id1","deviceModel":"/devicemodels/id1","name":"Sensor","note":"Testing a sensor.","serial":"A020000102"}' https://API-GATEWAY-URL/devices
+curl -i -H "Content-Type: application/json" -X POST -d '{"id":"/devices/id1","deviceModel":"/devicemodels/id1","name":"Sensor","note":"note1","serial":"s1"}' https://API-GATEWAY-URL/devices
 ```
-If you try to create another device using an existing id, the old item will be replaced by new item.
-Get an existing device by providing an id:
+
+Get request using id:
 ```
 curl -i https://API-GATEWAY-URL/devices/id1
 ```
-Also unit tests for code coverage are available inside tests folder. In order to test the functions yourself use the following command:
-```
-go test -coverprofile=cover.out
-```
-This will create a file named cover.out. To get a HTML representation of code coverage, use the following command after generating cover.out:
-
-go tool cover -html=cover.out -o cover.html
-
-Open the cover.html using a browser. Covered areas are shown in green. Coverage results from go tool cover -func=cover.out are presented here for both lamda functions:
-getDeviceInfo:
-```
-device-db/tests/getDeviceInfo/main.go:30:	Handler		83.3%
-device-db/tests/getDeviceInfo/main.go:119:	main		0.0%
-total:						(statements)	80.0%
-```
-postNewDevice:
-```
-device-db/tests/postNewDevice/main.go:30:	createNewDevice	100.0%
-device-db/tests/postNewDevice/main.go:76:	Handler		84.0%
-device-db/tests/postNewDevice/main.go:162:	main		0.0%
-total:						(statements)	89.6%
-```
-The cover.html files demonstrate that error handling codes for JSON marshaling/unmarshaling and also AWS session creation were not covered. However, it is still possible to obtain 100% coverage in both files. In order to achieve 100% coverage, one must implement mock methods that generate intentional errors for JSON marshaling/unmarshaling and AWS session as well.
 
