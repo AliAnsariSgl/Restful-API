@@ -54,7 +54,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">DevicesServ\test\GetDevice\main.go (77.3%)</option>
+				<option value="file0">DevicesServ\test\GetDevice\main.go (81.0%)</option>
 				
 				</select>
 			</div>
@@ -71,6 +71,8 @@
 		<pre class="file" id="file0" style="display: none">package main
 
 import (
+        model "DevicesServ/DataModel"
+        responses "DevicesServ/Responses"
         "encoding/json"
         "net/http"
         "os"
@@ -83,28 +85,17 @@ import (
         "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-// Device data model
-type Device struct {
-        ID          string `json:"id,omitempty"`
-        DeviceModel string `json:"deviceModel,omitempty"`
-        Name        string `json:"name,omitempty"`
-        Note        string `json:"note,omitempty"`
-        Serial      string `json:"serial,omitempty"`
-}
+var sess *session.Session
 
-// SuccessDeviceFound function: return response for found a device successfully
+// Init function Initialize session
+func init() <span class="cov8" title="1">{
+        // Initialize a session
+        region := os.Getenv("AWS_REGION")
+        sess = session.Must(session.NewSession(&amp;aws.Config{Region: &amp;region}))
 
-// ErrNotFound function: return not found error
-
-// ErrInternalServer function: return internal server error
-func InternalServerError() events.APIGatewayProxyResponse <span class="cov0" title="0">{
-        return events.APIGatewayProxyResponse{
-                StatusCode: http.StatusInternalServerError,
-                Body:       "Internal Server Error",
-        }
 }</span>
 
-// Handler function: Get user input parameter and returns a specific device if exists
+// return a specific device if exists
 func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) <span class="cov8" title="1">{
         // Get request id, and check if id is valid
         ID := req.PathParameters["id"]
@@ -115,15 +106,10 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
                 }, nil
         }</span>
 
-        // Initialize a session in AWS_REGION that the SDK will use to load
-        <span class="cov8" title="1">region := os.Getenv("AWS_REGION")
-        sess := session.Must(session.NewSession(&amp;aws.Config{Region: &amp;region}))
-
         // Create DynamoDB client
-
-        svc := dynamodb.New(sess)
+        <span class="cov8" title="1">svc := dynamodb.New(sess)
         db := mockDynamoDB{svc}
-        // Get dbDevice from DevicesTable
+        // Get Device
         DevicesTable := aws.String(os.Getenv("DEVICES_TABLE"))
         result, err := db.GetItem(&amp;dynamodb.GetItemInput{
                 TableName: DevicesTable,
@@ -135,10 +121,10 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
         })
 
         if err != nil </span><span class="cov0" title="0">{
-                return InternalServerError(), nil
+                return responses.InternalServerError(), nil
         }</span>
 
-        // If length of result is zero, then return NotFound response 404
+        // If length of result is zero response 404
         <span class="cov8" title="1">if len(result.Item) == 0 </span><span class="cov8" title="1">{
                 return events.APIGatewayProxyResponse{
                         StatusCode: http.StatusNotFound,
@@ -147,19 +133,19 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
         }</span>
 
         // Create empty Device object for return to response
-        <span class="cov8" title="1">device := Device{}
+        <span class="cov8" title="1">device := model.Device{}
 
         // Convert dynamodb result to Device object
         if err = dynamodbattribute.UnmarshalMap(result.Item, &amp;device); err != nil </span><span class="cov0" title="0">{
-                return InternalServerError(), nil
+                return responses.InternalServerError(), nil
         }</span>
 
         // Return found device to response
         <span class="cov8" title="1">deviceJSON, err := json.Marshal(device)
         if err != nil </span><span class="cov0" title="0">{
-                return InternalServerError(), nil
+                return responses.InternalServerError(), nil
         }</span>
-        //return response for found a device successfully
+        //return response for found device
         <span class="cov8" title="1">return events.APIGatewayProxyResponse{
                 StatusCode: http.StatusOK,
                 Body:       string(deviceJSON),

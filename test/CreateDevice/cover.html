@@ -54,7 +54,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">DevicesServ\test\CreateDevice\main.go (87.8%)</option>
+				<option value="file0">DevicesServ\test\CreateDevice\main.go (89.8%)</option>
 				
 				</select>
 			</div>
@@ -71,6 +71,8 @@
 		<pre class="file" id="file0" style="display: none">package main
 
 import (
+        model "DevicesServ/DataModel"
+        responses "DevicesServ/Responses"
         "encoding/json"
         "errors"
         "net/http"
@@ -84,35 +86,20 @@ import (
         "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-// Device data model
-type Device struct {
-        ID          string `json:"id,omitempty"`
-        DeviceModel string `json:"deviceModel,omitempty"`
-        Name        string `json:"name,omitempty"`
-        Note        string `json:"note,omitempty"`
-        Serial      string `json:"serial,omitempty"`
-}
+var sess *session.Session
 
-//return bad request payload error
-func IncompleteRequest(err error) events.APIGatewayProxyResponse <span class="cov8" title="1">{
-        return events.APIGatewayProxyResponse{
-                StatusCode: http.StatusBadRequest,
-                Body:       "Bad Request\n" + err.Error(),
-        }
-}</span>
+// Init function Initialize session
+func init() <span class="cov8" title="1">{
+        // Initialize a session
+        region := os.Getenv("AWS_REGION")
+        sess = session.Must(session.NewSession(&amp;aws.Config{Region: &amp;region}))
 
-// return internal server error
-func InternalServerError() events.APIGatewayProxyResponse <span class="cov0" title="0">{
-        return events.APIGatewayProxyResponse{
-                StatusCode: http.StatusInternalServerError,
-                Body:       "Internal Server Error",
-        }
 }</span>
 
 // Check Missing Payloads
 func CheckPayloads(PostRequestJSON map[string]interface{}) error <span class="cov8" title="1">{
         Flag := false
-        ErrorText := "Missing fields:"
+        ErrorText := " Incomplete Request:needed payloads:"
 
         if PostRequestJSON["id"] == nil </span><span class="cov8" title="1">{
                 Flag = true
@@ -135,7 +122,7 @@ func CheckPayloads(PostRequestJSON map[string]interface{}) error <span class="co
                 ErrorText += " 'serial' "
         }</span>
 
-        // If any fields are missing, return error
+        //  return error
         <span class="cov8" title="1">if Flag == true </span><span class="cov8" title="1">{
                 return errors.New(ErrorText)
         }</span>
@@ -143,9 +130,9 @@ func CheckPayloads(PostRequestJSON map[string]interface{}) error <span class="co
         <span class="cov8" title="1">return nil</span>
 }
 
-// BindPayloadToDevice function: Bind request json payload to device object
-func makeNewDevice(PayloadJSON map[string]interface{}) Device <span class="cov8" title="1">{
-        return Device{
+// insert request json payload into new device
+func makeNewDevice(PayloadJSON map[string]interface{}) model.Device <span class="cov8" title="1">{
+        return model.Device{
                 ID:          PayloadJSON["id"].(string),
                 DeviceModel: PayloadJSON["deviceModel"].(string),
                 Name:        PayloadJSON["name"].(string),
@@ -155,12 +142,7 @@ func makeNewDevice(PayloadJSON map[string]interface{}) Device <span class="cov8"
 }</span>
 
 //Insert Devices to database
-func InsertDeviceToDatabase(device Device) error <span class="cov8" title="1">{
-
-        // sess, err := session.NewSession(&amp;aws.Config{
-        //         Region:      aws.String("us-east-2"),
-        //         Credentials: credentials.NewStaticCredentials("AKIAJF6WYW3AP4UQU2XA", "uVc+iL2714LMM16C7cqCGh7XjOFRljBDkdtSKjyO", ""),
-        // })
+func InsertDeviceToDatabase(device model.Device) error <span class="cov8" title="1">{
 
         // Initialize a session in AWS_REGION Using SDK
         region := os.Getenv("AWS_REGION")
@@ -189,37 +171,37 @@ func InsertDeviceToDatabase(device Device) error <span class="cov8" title="1">{
         <span class="cov8" title="1">return nil</span>
 }
 
-// Handler function: persists the posted json Device and returns it
-// back to the client as an acknowledgement
+// Handler function
 func Handler(r events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) <span class="cov8" title="1">{
         // Unmarshal request payload
         var PostRequestJSON map[string]interface{}
         if err := json.Unmarshal([]byte(r.Body), &amp;PostRequestJSON); err != nil </span><span class="cov8" title="1">{
-                return IncompleteRequest(errors.New("")), nil
+                return responses.IncompleteRequest(errors.New("")), nil
         }</span>
 
-        // Check request payload for missing fields
+        // finding missing payloads
         <span class="cov8" title="1">err := CheckPayloads(PostRequestJSON)
         if err != nil </span><span class="cov8" title="1">{
-                return IncompleteRequest(err), nil
+                return responses.IncompleteRequest(err), nil
         }</span>
 
-        //Bind request payload to device struct
+        // call method to insert request json payload into new device
         <span class="cov8" title="1">device := makeNewDevice(PostRequestJSON)
 
-        // Insert device object to DB
+        // Insert device object to dynamodb
         if err := InsertDeviceToDatabase(device); err != nil </span><span class="cov0" title="0">{
-                return InternalServerError(), nil
+                return responses.InternalServerError(), nil
         }</span>
 
-        // Return inserted device to response
+        // make response
         <span class="cov8" title="1">deviceJSON, err := json.Marshal(device)
         if err != nil </span><span class="cov0" title="0">{
-                return InternalServerError(), nil
+                return responses.InternalServerError(), nil
         }</span>
-        //create a new device
+        //create new device
         <span class="cov8" title="1">return events.APIGatewayProxyResponse{
                 StatusCode: http.StatusCreated,
+                Headers:    map[string]string{"Content-Type": "application/json"},
                 Body:       string(deviceJSON),
         }, nil</span>
 }

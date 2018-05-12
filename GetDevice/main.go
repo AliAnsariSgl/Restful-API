@@ -1,6 +1,8 @@
 package main
 
 import (
+	model "DevicesServ/DataModel"
+	responses "DevicesServ/Responses"
 	"encoding/json"
 	"net/http"
 	"os"
@@ -13,21 +15,14 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-// Device data model
-type Device struct {
-	ID          string `json:"id,omitempty"`
-	DeviceModel string `json:"deviceModel,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Note        string `json:"note,omitempty"`
-	Serial      string `json:"serial,omitempty"`
-}
+var sess *session.Session
 
-// return internal server error
-func InternalServerError() events.APIGatewayProxyResponse {
-	return events.APIGatewayProxyResponse{
-		StatusCode: http.StatusInternalServerError,
-		Body:       "Internal Server Error",
-	}
+// Init function Initialize session
+func init() {
+	// Initialize a session
+	region := os.Getenv("AWS_REGION")
+	sess = session.Must(session.NewSession(&aws.Config{Region: &region}))
+
 }
 
 // return a specific device if exists
@@ -40,10 +35,6 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 			Body:       "Not Found",
 		}, nil
 	}
-
-	// Initialize a session in AWS_REGION that the SDK will use to load
-	region := os.Getenv("AWS_REGION")
-	sess := session.Must(session.NewSession(&aws.Config{Region: &region}))
 
 	// Create DynamoDB client
 	svc := dynamodb.New(sess)
@@ -60,7 +51,7 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	})
 
 	if err != nil {
-		return InternalServerError(), nil
+		return responses.InternalServerError(), nil
 	}
 
 	// If length of result is zero response 404
@@ -72,17 +63,17 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 	}
 
 	// Create empty Device object for return to response
-	device := Device{}
+	device := model.Device{}
 
 	// Convert dynamodb result to Device object
 	if err = dynamodbattribute.UnmarshalMap(result.Item, &device); err != nil {
-		return InternalServerError(), nil
+		return responses.InternalServerError(), nil
 	}
 
 	// Return found device to response
 	deviceJSON, err := json.Marshal(device)
 	if err != nil {
-		return InternalServerError(), nil
+		return responses.InternalServerError(), nil
 	}
 	//return response for found device
 	return events.APIGatewayProxyResponse{

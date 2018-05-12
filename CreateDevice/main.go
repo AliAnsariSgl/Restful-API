@@ -1,6 +1,8 @@
 package main
 
 import (
+	"DevicesServ/DataModel"
+	responses "DevicesServ/Responses"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -14,29 +16,14 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-// Device data model
-type Device struct {
-	ID          string `json:"id,omitempty"`
-	DeviceModel string `json:"deviceModel,omitempty"`
-	Name        string `json:"name,omitempty"`
-	Note        string `json:"note,omitempty"`
-	Serial      string `json:"serial,omitempty"`
-}
+var sess *session.Session
 
-//return bad request payload error
-func IncompleteRequest(err error) events.APIGatewayProxyResponse {
-	return events.APIGatewayProxyResponse{
-		StatusCode: http.StatusBadRequest,
-		Body:       "Bad Request\n" + err.Error(),
-	}
-}
+// Init function Initialize session
+func init() {
+	// Initialize a session
+	region := os.Getenv("AWS_REGION")
+	sess = session.Must(session.NewSession(&aws.Config{Region: &region}))
 
-// return internal server error
-func InternalServerError() events.APIGatewayProxyResponse {
-	return events.APIGatewayProxyResponse{
-		StatusCode: http.StatusInternalServerError,
-		Body:       "Internal Server Error",
-	}
 }
 
 // Check Missing Payloads
@@ -74,8 +61,8 @@ func CheckPayloads(PostRequestJSON map[string]interface{}) error {
 }
 
 // insert request json payload into new device
-func makeNewDevice(PayloadJSON map[string]interface{}) Device {
-	return Device{
+func makeNewDevice(PayloadJSON map[string]interface{}) model.Device {
+	return model.Device{
 		ID:          PayloadJSON["id"].(string),
 		DeviceModel: PayloadJSON["deviceModel"].(string),
 		Name:        PayloadJSON["name"].(string),
@@ -85,16 +72,7 @@ func makeNewDevice(PayloadJSON map[string]interface{}) Device {
 }
 
 //Insert Devices to database
-func InsertDeviceToDatabase(device Device) error {
-	// bad option !
-	// sess, err := session.NewSession(&aws.Config{
-	// 	Region:      aws.String("us-east-2"),
-	// 	Credentials: credentials.NewStaticCredentials("AKIAJF6WYW3AP4UQU2XA", "uVc+iL2714LMM16C7cqCGh7XjOFRljBDkdtSKjyO", ""),
-	// })
-
-	// Initialize a session in AWS_REGION Using SDK
-	region := os.Getenv("AWS_REGION")
-	sess := session.Must(session.NewSession(&aws.Config{Region: &region}))
+func InsertDeviceToDatabase(device model.Device) error {
 
 	// Create DynamoDB client
 	svc := dynamodb.New(sess)
@@ -124,13 +102,13 @@ func Handler(r events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, e
 	// Unmarshal request payload
 	var PostRequestJSON map[string]interface{}
 	if err := json.Unmarshal([]byte(r.Body), &PostRequestJSON); err != nil {
-		return IncompleteRequest(errors.New("")), nil
+		return responses.IncompleteRequest(errors.New("")), nil
 	}
 
 	// finding missing payloads
 	err := CheckPayloads(PostRequestJSON)
 	if err != nil {
-		return IncompleteRequest(err), nil
+		return responses.IncompleteRequest(err), nil
 	}
 
 	// call method to insert request json payload into new device
@@ -138,17 +116,18 @@ func Handler(r events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, e
 
 	// Insert device object to dynamodb
 	if err := InsertDeviceToDatabase(device); err != nil {
-		return InternalServerError(), nil
+		return responses.InternalServerError(), nil
 	}
 
 	// make response
 	deviceJSON, err := json.Marshal(device)
 	if err != nil {
-		return InternalServerError(), nil
+		return responses.InternalServerError(), nil
 	}
 	//create new device
 	return events.APIGatewayProxyResponse{
 		StatusCode: http.StatusCreated,
+		Headers:    map[string]string{"Content-Type": "application/json"},
 		Body:       string(deviceJSON),
 	}, nil
 }
