@@ -88,7 +88,6 @@ To test your Go installation, open a new terminal and enter:
 $ go version
 ```
 ##### setup Serverless
-The intial setup was straightforward:
 
   1. Install NodeJS: [download](https://nodejs.org/en/download/) or using package manager.
   2. Install the Serverless Framework: 
@@ -132,8 +131,6 @@ serverless deploy
 
 For testing by URL, replace you API-GATEWAY-URL with following curl commands:
 
-#### NOTE :
-Also you can use [POSTMAN](https://www.getpostman.com/) for testing
 Create a new device:
 ```
 curl -i -H "Content-Type: application/json" -X POST -d '{"id":"/devices/id1","deviceModel":"/devicemodels/id1","name":"Sensor","note":"note1","serial":"s1"}' https://API-GATEWAY-URL/devices
@@ -143,4 +140,7 @@ Get request using id:
 ```
 curl -i https://API-GATEWAY-URL/devices/id1
 ```
+#### NOTE :
+Also you can use [POSTMAN](https://www.getpostman.com/) for testing
+
 
