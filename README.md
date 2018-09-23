@@ -1,47 +1,46 @@
 # Restful-API
 Simple Restful API on AWS
 This project implements a simple Restful API on AWS using the following tech stack:
-
 ### Pre-requisites
 Install Serverless framework:
 https://serverless.com/framework/docs/providers/aws/guide/quick-start/
-  ##### Linux Packages
+#### Linux Packages
 
-    ```
-    apt-get update -y
-    ```
-	apt-get install -y zip
-	apt-get install -y unzip
-	# Python
-	apt install -y python3
-	apt install -y python3-pip
-    ```
-	# Curl
-	apt -y install  curl  
+What things you need to install the software and how to install them
 
-	# AWS CLI
-	curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-	```
-	aws --version
-	```
-	# Nodejs
-    ```
-	curl -sL https://deb.nodesource.com/setup_8.x | bash -
-	apt-get install -y nodejs
-	npm --version
-	```
+```
+apt-get update -y
+```
+apt-get install -y zip
+apt-get install -y unzip
+ ##### Python
+ apt install -y python3
+apt install -y python3-pip
 
-	# Serverless
-    ```
-	npm install -g serverless
-	npm install serverless-pseudo-parameters
-	```
-	# Git
-	```
-    apt-get install -y git
-    ```
+##### Curl
+apt -y install  curl  
+##### AWS CLI
+curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+
+aws --version
+
+##### Nodejs
+
+curl -sL https://deb.nodesource.com/setup_8.x | bash -
+apt-get install -y nodejs
+npm --version
+
+##### Serverless
+
+npm install -g serverless
+npm install serverless-pseudo-parameters
+
+# Git
+
+apt-get install -y git
+
 	
-	# Go Dep
+# Go Dep
 	curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
 ### Build
