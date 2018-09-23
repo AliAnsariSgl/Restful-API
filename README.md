@@ -34,7 +34,6 @@ apt-get install -y unzip
 ```
 ##### Nodejs
 [Installing Nodejs](https://nodejs.org/en/download/)
-Download :
 ```
 curl -sL https://deb.nodesource.com/setup_8.x | bash -
 ```
