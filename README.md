@@ -17,21 +17,21 @@ To verify installation :
 ```
 aws --version
 ```
+##### Go Dep
+On MacOS you can install or upgrade to the latest released version with Homebrew:
+```
+$ brew install dep
+$ brew upgrade dep
+```
+On other platforms you can use the install.sh script:
+```
+curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+```
 ##### Linux Packages zip & unzip Package
 ```
 apt-get install -y zip
 apt-get install -y unzip
 ```
-##### Python
-```
-apt install -y python3
-apt install -y python3-pip
-```
-##### Curl
-```
-apt -y install  curl  
-```
-
 ##### Nodejs
 [Installing Nodejs ](https://nodejs.org/en/)
 
@@ -52,16 +52,6 @@ npm --version
 Installation :
 ```
 apt-get install -y git
-```
-##### Go Dep
-On MacOS you can install or upgrade to the latest released version with Homebrew:
-```
-$ brew install dep
-$ brew upgrade dep
-```
-On other platforms you can use the install.sh script:
-```
-curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 ```
 ## Build
     make
