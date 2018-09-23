@@ -4,13 +4,11 @@ This project implements a simple Restful API on AWS using the following tech sta
 ## Pre-requisites
 
 ### Linux Packages
-
 ##### zip & unzip Package
 ```
 apt-get install -y zip
 apt-get install -y unzip
 ```
-
 ##### Python
 Installation :
 ```
@@ -56,7 +54,6 @@ Installation :
 ```
 apt-get install -y git
 ```
-
 ##### Go Dep
 On MacOS you can install or upgrade to the latest released version with Homebrew:
 ```
