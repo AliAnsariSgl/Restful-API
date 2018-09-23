@@ -26,24 +26,35 @@ apt -y install  curl
 ```
 curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
 ```
-Then
+To verify installation :
+```
 aws --version
-
+```
 ##### Nodejs
+[Installing Nodejs ](https://nodejs.org/en/)
 
+Download :
+```
 curl -sL https://deb.nodesource.com/setup_8.x | bash -
+```
+```
 apt-get install -y nodejs
+```
+To verify installation :
+```
 npm --version
-
+```
 ##### Serverless
-
+```
 npm install -g serverless
+```
+```
 npm install serverless-pseudo-parameters
-
+```
 ##### Git
-
+```
 apt-get install -y git
-
+```
 	
 ##### Go Dep
 	curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
