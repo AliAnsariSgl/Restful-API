@@ -33,7 +33,7 @@ apt-get install -y zip
 apt-get install -y unzip
 ```
 ##### Nodejs
-[Installing Nodejs ](https://nodejs.org/en/)
+[Installing Nodejs](https://nodejs.org/en/download/)
 
 Download :
 ```
@@ -47,7 +47,6 @@ To verify installation :
 ```
 npm --version
 ```
-
 ##### Git
 Installation :
 ```
