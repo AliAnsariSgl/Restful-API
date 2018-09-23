@@ -13,6 +13,7 @@ apt-get install -y unzip
 ```
 
 ##### Python
+Installation :
 ```
 apt install -y python3
 apt install -y python3-pip
@@ -37,6 +38,7 @@ Download :
 ```
 curl -sL https://deb.nodesource.com/setup_8.x | bash -
 ```
+Installation :
 ```
 apt-get install -y nodejs
 ```
@@ -45,13 +47,13 @@ To verify installation :
 npm --version
 ```
 ##### Serverless
+Installation :
 ```
 npm install -g serverless
-```
-```
 npm install serverless-pseudo-parameters
 ```
 ##### Git
+Installation :
 ```
 apt-get install -y git
 ```
