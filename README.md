@@ -2,8 +2,7 @@
 Simple Restful API on AWS
 This project implements a simple Restful API on AWS using the following tech stack:
 ## Pre-requisites
-Install Serverless framework:
-https://serverless.com/framework/docs/providers/aws/guide/quick-start/
+
 ### Linux Packages
 
 ##### zip & unzip Package
@@ -47,7 +46,7 @@ To verify installation :
 npm --version
 ```
 ##### Serverless
-Installation :
+[Install Serverless framework](https://serverless.com/framework/docs/providers/aws/guide/quick-start/)
 ```
 npm install -g serverless
 npm install serverless-pseudo-parameters
@@ -57,10 +56,17 @@ Installation :
 ```
 apt-get install -y git
 ```
-	
-##### Go Dep
-	curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
+##### Go Dep
+On MacOS you can install or upgrade to the latest released version with Homebrew:
+```
+$ brew install dep
+$ brew upgrade dep
+```
+On other platforms you can use the install.sh script:
+```
+curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+```
 ## Build
     make
 ### Unit Test
