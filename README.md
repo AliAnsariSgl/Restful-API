@@ -2,13 +2,14 @@
 Simple Restful API on AWS
 This project implements a simple Restful API on AWS using the following tech stack:
 
-    ### Pre-requisites
+### Pre-requisites
 Install Serverless framework:
 https://serverless.com/framework/docs/providers/aws/guide/quick-start/
-#### Linux Packages
+  ##### Linux Packages
 
     ```
     apt-get update -y
+    ```
 	apt-get install -y zip
 	apt-get install -y unzip
 	# Python
