@@ -1,4 +1,4 @@
-# Restful-API
+# CRUD APIs 
 Simple Restful API on AWS
 This project implements a simple Restful API on AWS using the following tech stack:
 ## Pre-requisites
