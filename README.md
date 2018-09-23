@@ -2,6 +2,12 @@
 Simple Restful API on AWS
 This project implements a simple Restful API on AWS using the following tech stack:
 ## Pre-requisites
+    *Serverless
+    *AWS CLI
+    *Go Dep
+    *Linux Packages zip & unzip Package
+    *NodeJs
+    *Git
 ##### Serverless
 [Install Serverless framework](https://serverless.com/framework/docs/providers/aws/guide/quick-start/)
 ```
@@ -32,7 +38,7 @@ curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 apt-get install -y zip
 apt-get install -y unzip
 ```
-##### Nodejs
+##### NodeJs
 [Installing Nodejs](https://nodejs.org/en/download/)
 ```
 curl -sL https://deb.nodesource.com/setup_8.x | bash -
