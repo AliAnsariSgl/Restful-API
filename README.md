@@ -6,14 +6,13 @@ Install Serverless framework:
 https://serverless.com/framework/docs/providers/aws/guide/quick-start/
 #### Linux Packages
 
-What things you need to install the software and how to install them
-
-```
-apt-get update -y
+##### zip & unzip Package
 ```
 apt-get install -y zip
 apt-get install -y unzip
- ##### Python
+```
+
+##### Python
  apt install -y python3
 apt install -y python3-pip
 
