@@ -40,21 +40,21 @@ npm --version
 npm install -g serverless
 npm install serverless-pseudo-parameters
 
-# Git
+##### Git
 
 apt-get install -y git
 
 	
-# Go Dep
+##### Go Dep
 	curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
-### Build
+## Build
     make
 ### Unit Test
     Unit Test
-### Deploy
+## Deploy
     serverless deploy
 
-### Integration Test
+## Integration Test
     Integration Test
-### Logs
+## Logs
