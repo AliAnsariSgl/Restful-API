@@ -2,22 +2,11 @@
 Simple Restful API on AWS
 This project implements a simple Restful API on AWS using the following tech stack:
 ## Pre-requisites
-
-### Linux Packages
-##### zip & unzip Package
+##### Serverless
+[Install Serverless framework](https://serverless.com/framework/docs/providers/aws/guide/quick-start/)
 ```
-apt-get install -y zip
-apt-get install -y unzip
-```
-##### Python
-Installation :
-```
-apt install -y python3
-apt install -y python3-pip
-```
-##### Curl
-```
-apt -y install  curl  
+npm install -g serverless
+npm install serverless-pseudo-parameters
 ```
 ##### AWS CLI
 [Installing the AWS Command Line Interface](https://docs.aws.amazon.com/cli/latest/userguide/installing.html)
@@ -28,6 +17,21 @@ To verify installation :
 ```
 aws --version
 ```
+##### Linux Packages zip & unzip Package
+```
+apt-get install -y zip
+apt-get install -y unzip
+```
+##### Python
+```
+apt install -y python3
+apt install -y python3-pip
+```
+##### Curl
+```
+apt -y install  curl  
+```
+
 ##### Nodejs
 [Installing Nodejs ](https://nodejs.org/en/)
 
@@ -43,12 +47,7 @@ To verify installation :
 ```
 npm --version
 ```
-##### Serverless
-[Install Serverless framework](https://serverless.com/framework/docs/providers/aws/guide/quick-start/)
-```
-npm install -g serverless
-npm install serverless-pseudo-parameters
-```
+
 ##### Git
 Installation :
 ```
