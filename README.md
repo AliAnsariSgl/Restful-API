@@ -57,11 +57,25 @@ Installation :
 apt-get install -y git
 ```
 ## Build
-    make
+    Build the project using the following command:
+    ```
+    make bild
+    ```
 ### Unit Test
-    Unit Test
+
+     Running UnitTests using the following command:
+    ```
+    make unit-test
+    ```
 ## Deploy
-    serverless deploy
+      Deploy the project using the following command:
+    ```
+    make deploy
+    ```
 ## Integration Test
-    Integration Test
+     Running Integration Test using the following command:
+      
+    ```
+    make integration-test
+    ```
 ## Logs
