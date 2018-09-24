@@ -76,8 +76,7 @@ Deploy the project using the following command:
     ```
 ## Integration Test
 Running Integration Test using the following command
-
-    ```
-    make integration-test
-    ```
+```
+make integration-test
+```
 ## Logs
