@@ -57,23 +57,22 @@ Installation :
 apt-get install -y git
 ```
 ## Build
-    Build the project using the following command:
+Build the project using the following command:
     ```
     make bild
     ```
 ### Unit Test
-
-     Running UnitTests using the following command:
+Running UnitTests using the following command:
     ```
     make unit-test
     ```
 ## Deploy
-      Deploy the project using the following command:
+Deploy the project using the following command:
     ```
     make deploy
     ```
 ## Integration Test
-     Running Integration Test using the following command:
+Running Integration Test using the following command:
       
     ```
     make integration-test
